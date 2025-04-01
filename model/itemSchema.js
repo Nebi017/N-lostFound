@@ -9,10 +9,7 @@ const lostFoundSchema = new mongoose.Schema({
   secondaryColor: { type: String },
   dateLostorFound: { type: Date, required: true },
   timeLostorFound: { type: String },
-  image: {
-    public_id: { type: String },
-    url: { type: String },
-  },
+  image: {type: String},
   additionalInfo: { type: String },
   whereLostorFound: { type: String, required: true },
   location: { type: String, required: true },
