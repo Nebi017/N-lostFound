@@ -2,7 +2,7 @@ const express = require("express");
 const LostFound = require("../model/itemSchema.js"); // Your schema file
 const itemJoiSchema = require("../middlewares/joiSchema.js");
 const isAuthenticated = require("../middlewares/authMiddleware.js");
-const upload = require("../middlewares/uploadMiddleware.js");
+const upload = require("../middlewares/upload.js");
 // const { saveItem } = require("../middlewares/itemcontroller.js");
 // const findMatches = require ("../middlewares/matchQueus.js")
 
@@ -12,7 +12,7 @@ router.post("/", isAuthenticated, upload.single("image"), async (req, res) => {
   try {
     console.log("User Object:", req.user); // Debug: Check the user object
     console.log("User ID:", req.user ? req.user._id : "User ID is missing");
-    // console.log("Uploaded file:", req.file);
+    console.log("Uploaded file:", req.file);
     // Validate the request body with Joi
     const { error } = itemJoiSchema.validate(req.body);
     if (error) {
@@ -26,7 +26,7 @@ router.post("/", isAuthenticated, upload.single("image"), async (req, res) => {
     }
 
     // If an image was uploaded, get the file path
-    // const imageUrl = req.file ? req.file.path : null;
+    const imageUrl = req.file ? req.file.path : null;
 
     // Create a new item object based on the request data
     const newItem = new LostFound({
@@ -37,10 +37,7 @@ router.post("/", isAuthenticated, upload.single("image"), async (req, res) => {
       secondaryColor: req.body.secondaryColor,
       dateLostorFound: new Date(req.body.dateLostorFound), // Ensure this is a valid date
       timeLostorFound: req.body.timeLostorFound,
-      image: {
-        public_id: req.file.public_id,
-        url: req.file.path,
-      }, 
+      image:imageUrl, 
       additionalInfo: req.body.additionalInfo,
       whereLostorFound: req.body.whereLostorFound,
       subcity: req.body.subcity,
